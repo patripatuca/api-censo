@@ -36,12 +36,16 @@ app.put("/poblaciones/:id",function(req,res){
     const nuevosDatos=req.body;
     Poblacion.findOne({where:{id}})
     .then(poblacion=>{
+        if (poblacion){
         //copia los campos de nuevosDatos al objeto original//
         Object.assign(poblacion,nuevosDatos);
 
         //guarda los datos actualizados y genera respuesta//
         poblacion.save()
         .then(poblacion=> res.json(poblacion))
+    } else {
+        res.status(404).json("poblacion no registrada")
+    }
     })
     .catch(err=>res.status(400).json(err))
 
